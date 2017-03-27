@@ -1,0 +1,77 @@
+#!/bin/sh
+# jonandermonleon@gmail.com
+# Functions declaration
+function moveFile {
+        # This function actually moves the file and then links it
+        fileWithPath=$(realpath "$1")
+        targetdir=$(realpath "$2")
+        fileName=$(basename "$1")
+	# Let's check if we are overwriting a file with a symlink
+        if [ -L "$1" ]
+        then
+                echo "$1 is already a symlink, nothing will be done"
+                return
+        fi
+        echo "Moving file "$fileWithPath" to "$targetdir""
+        #echo fileName "$fileName"
+        # Several implementations
+        #mv -- "$fileWithPath" "$targetdir"
+        rsync -ahP --progress --remove-source-files "$fileWithPath" "$targetdir"
+        #pv "$fileWithPath" > "$targetdir"/"$fileName"
+        #rm "$fileWithPath"
+        echo "Creating symlink "$targetdir"/"$fileName" to "$fileWithPath""
+        ln -s -- "$targetdir"/"$fileName" "$fileWithPath"
+}
+
+
+# Check we have two parameters
+#if [ "$#" -ne 2 ]
+#then
+#        echo "Parameters must be 2: movelink SOURCE_FILE DESTINATION_DIRECTORY"
+#       echo 'Move multiple files in a directory: find . ! -path . -iname "*" |while read f;do movelink "$f" FOLEDER_PATH_WITHOUT_QUOTES;done'
+#        exit 1
+#fi
+
+# The user can call the script in two ways:
+# movelink FILE DESTINATION_DIR
+# or
+# movelink e=EXTENSION ORIGIN_DIR DESTINATION_DIR
+# The difference is that the first will move a single file, while the second option, with an argument starting by "e=", will move all the
+# files with extension EXTENSION from ORIGIN_DIR to DESTINATION_DIR
+
+if [ "$#" -eq 2 ]
+then
+        # Call the function that moves a single file
+        moveFile "$1" "$2"
+elif [ "$#" -eq 3 ]
+then
+#       Moving Multiple Files
+#       We should receive three parameters: e=x ORIGINAL_DIR DEST_DIR
+#       First, we check the first parameter starts with e=something. If it doesn't, we quit
+        argument1=$(cut -d "=" -f 1 <<< "$1")
+        if [ $argument1 = "e" ]
+        then
+#               echo "es e"
+                extension=$(cut -d "=" -f 2 <<< "$1")
+                echo "Moving all files with extension $extension"
+                FILES=`ls $(realpath $2)/*.$extension`
+                for f in $FILES
+                do
+                        moveFile $f $3
+                done
+        else
+                echo "Unrecognized parameter $argument1"
+                exit 1
+        fi
+else
+        # If the script is not called with 2 or 3 parameters
+        echo "Call the script with either two or three arguments"
+        echo "Examples:"
+        echo "movelink FILE DESTINATION_DIRECTORY"
+        echo "or, for multiple files in the same directory:"
+        echo "movelink e=EXTENSION DIRECTORY DESTINATION_DIRECTORY"
+        exit 1
+fi
+
+# Notify the user the process is complete
+echo "All tasks finished"
