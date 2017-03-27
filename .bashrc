@@ -2,6 +2,8 @@
 # ~/.bashrc
 #
 
+# Dependencies: sysstat and xmlstarlet
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
