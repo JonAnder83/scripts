@@ -33,7 +33,8 @@ alias kk='sudo systemctl stop kodi && startx'
 alias lsorphans='sudo pacman -Qdt'
 alias rmorphans='sudo pacman -Rs $(pacman -Qtdq)'
 
-PS1='[\u@\h \W]\$ '
+#PS1='[\u@\h \W]\$ '
+PS1='\[`[ $? = 0 ] && X=2 || X=1; tput setaf $X`\]\h\[`tput sgr0`\]:$PWD\n\$ '
 
 # Banner
 clear
