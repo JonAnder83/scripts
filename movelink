@@ -1,5 +1,8 @@
 #!/bin/sh
 # jonandermonleon@gmail.com
+# movelink: Moves files from a directory to a destination one and makes a soft link to the origin directory
+# 0.5 27-03-2017
+
 # Functions declaration
 function moveFile {
         # This function actually moves the file and then links it
@@ -14,23 +17,11 @@ function moveFile {
         fi
         echo "Moving file "$fileWithPath" to "$targetdir""
         #echo fileName "$fileName"
-        # Several implementations
-        #mv -- "$fileWithPath" "$targetdir"
         rsync -ahP --progress --remove-source-files "$fileWithPath" "$targetdir"
-        #pv "$fileWithPath" > "$targetdir"/"$fileName"
-        #rm "$fileWithPath"
         echo "Creating symlink "$targetdir"/"$fileName" to "$fileWithPath""
         ln -s -- "$targetdir"/"$fileName" "$fileWithPath"
 }
 
-
-# Check we have two parameters
-#if [ "$#" -ne 2 ]
-#then
-#        echo "Parameters must be 2: movelink SOURCE_FILE DESTINATION_DIRECTORY"
-#       echo 'Move multiple files in a directory: find . ! -path . -iname "*" |while read f;do movelink "$f" FOLEDER_PATH_WITHOUT_QUOTES;done'
-#        exit 1
-#fi
 
 # The user can call the script in two ways:
 # movelink FILE DESTINATION_DIR
@@ -51,14 +42,15 @@ then
         argument1=$(cut -d "=" -f 1 <<< "$1")
         if [ $argument1 = "e" ]
         then
-#               echo "es e"
                 extension=$(cut -d "=" -f 2 <<< "$1")
                 echo "Moving all files with extension $extension"
-                FILES=`ls $(realpath $2)/*.$extension`
-                for f in $FILES
-                do
-                        moveFile $f $3
-                done
+
+		find "$2" -iname "*."$extension"" | while read f
+		do
+			moveFile "$f" "$3"
+		done
+
+
         else
                 echo "Unrecognized parameter $argument1"
                 exit 1
