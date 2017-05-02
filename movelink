@@ -68,6 +68,7 @@ then
         fi
 else
         # If the script is not called with 2 or 3 parameters
+	echo "movelink 1.0 02-05-2017"
         echo "Call the script with either two or three arguments"
         echo "Examples:"
         echo "movelink FILE DESTINATION_DIRECTORY"
