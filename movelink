@@ -68,7 +68,7 @@ then
         fi
 else
         # If the script is not called with 2 or 3 parameters
-	echo "movelink 1.0 02-05-2017 - jonandermonleon(at)gmail.com"
+	echo "movelink 1.02 03-05-2017 - jonandermonleon(at)gmail.com"
         echo "Move a file from dir "A" to dir "B" and create a link that points from "A" to the new location in "B""
 	echo "Call the script with either two or three arguments"
         echo "==Examples=="
