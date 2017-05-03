@@ -1,7 +1,7 @@
 #!/bin/sh
 # jonandermonleon@gmail.com
 # movelink: Moves files from a directory to a destination one and makes a soft link to the origin directory
-# v1.0 02-05-2017
+# v1.01 03-05-2017
 
 # Functions declaration
 function moveFile {
@@ -16,11 +16,11 @@ function moveFile {
                 echo "$1 is already a symlink, nothing will be done"
                 return
         fi
-        echo "Moving file "$fileWithPath" to "$targetdir""
+        echo "Moving file "$fileWithPath" to "$target""
         #echo fileName "$fileName"
 	# moving
         rsync -ahP --progress --remove-source-files "$fileWithPath" "$target"
-        echo "Creating symlink "$targetdir"/"$fileName" to "$fileWithPath""
+        echo "Creating symlink "$target"/"$fileName" to "$fileWithPath""
 	# linking
 
         if [ -d "$target" ]
