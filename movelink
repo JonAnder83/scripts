@@ -1,7 +1,7 @@
 #!/bin/sh
 # jonandermonleon@gmail.com
 # movelink: Moves files from a directory to a destination one and makes a soft link to the origin directory
-# v1.01 03-05-2017
+# v1.02 03-05-2017
 
 # Functions declaration
 function moveFile {
@@ -68,12 +68,13 @@ then
         fi
 else
         # If the script is not called with 2 or 3 parameters
-	echo "movelink 1.0 02-05-2017"
-        echo "Call the script with either two or three arguments"
-        echo "Examples:"
-        echo "movelink FILE DESTINATION_DIRECTORY"
+	echo "movelink 1.0 02-05-2017 - jonandermonleon(at)gmail.com"
+        echo "Move a file from dir "A" to dir "B" and create a link that points from "A" to the new location in "B""
+	echo "Call the script with either two or three arguments"
+        echo "==Examples=="
+        echo "	movelink FILE DESTINATION_DIRECTORY"
         echo "or, for multiple files in the same directory:"
-        echo "movelink e=EXTENSION DIRECTORY DESTINATION_DIRECTORY"
+        echo "	movelink e=EXTENSION DIRECTORY DESTINATION_DIRECTORY"
         exit 1
 fi
 
