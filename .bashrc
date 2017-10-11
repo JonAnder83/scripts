@@ -2,7 +2,7 @@
 # ~/.bashrc
 #
 
-# Dependencies: sysstat and xmlstarlet
+# Dependencies: sysstat, screenfetch and xmlstarlet
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
