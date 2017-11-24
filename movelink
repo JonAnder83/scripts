@@ -7,7 +7,7 @@
 function moveFile {
         # This function actually moves the file and then links it
         # Let's first check that the origin file exists before we try to move a non-existing file and mess it all up
-        if [-e "$1"]
+        if [ -e "$1" ]
         then
                 fileWithPath=$(realpath "$1")
                 target=$(realpath "$2")
