@@ -1,35 +1,39 @@
 #!/bin/sh
 # jonandermonleon@gmail.com
 # movelink: Moves files from a directory to a destination one and makes a soft link to the origin directory
-# v1.02 03-05-2017
+# v1.03 24-11-2017
 
 # Functions declaration
 function moveFile {
         # This function actually moves the file and then links it
-
-        fileWithPath=$(realpath "$1")
-        target=$(realpath "$2")
-        fileName=$(basename "$1")
-	# Let's check if we are overwriting a file with a symlink
-        if [ -L "$1" ]
+        # Let's first check that the origin file exists before we try to move a non-existing file and mess it all up
+        if [-e "$1"]
         then
-                echo "$1 is already a symlink, nothing will be done"
-                return
-        fi
-        echo "Moving file "$fileWithPath" to "$target""
-        #echo fileName "$fileName"
-	# moving
-        rsync -ahP --progress --remove-source-files "$fileWithPath" "$target"
-        echo "Creating symlink "$target"/"$fileName" to "$fileWithPath""
-	# linking
+                fileWithPath=$(realpath "$1")
+                target=$(realpath "$2")
+                fileName=$(basename "$1")
+                # Let's check if we are overwriting a file with a symlink
+                if [ -L "$1" ]
+                then
+                        echo "$1 is already a symlink, nothing will be done"
+                        return
+                fi
+                echo "Moving file "$fileWithPath" to "$target""
+                #echo fileName "$fileName"
+                # moving
+                rsync -ahP --progress --remove-source-files "$fileWithPath" "$target"
+                echo "Creating symlink "$target"/"$fileName" to "$fileWithPath""
+                # linking
 
-        if [ -d "$target" ]
-	then
-		ln -s -- "$target"/"$fileName" "$fileWithPath"
-	else
-		ln -s -- "$target" "$fileWithPath"		
+                if [ -d "$target" ]
+                then
+                        ln -s -- "$target"/"$fileName" "$fileWithPath"
+                else
+                        ln -s -- "$target" "$fileWithPath"		
+                fi
+        else
+                echo "$1 does not exist, aborting."
         fi
-
 	
 }
 
@@ -68,7 +72,7 @@ then
         fi
 else
         # If the script is not called with 2 or 3 parameters
-	echo "movelink 1.02 03-05-2017 - jonandermonleon(at)gmail.com"
+	echo "movelink 1.03 24-11-2017 - jonandermonleon(at)gmail.com"
         echo "Move a file from dir "A" to dir "B" and create a link that points from "A" to the new location in "B""
 	echo "Call the script with either two or three arguments"
         echo "==Examples=="
